@@ -12,19 +12,25 @@ public class DatabaseConnection {
     }
 
     public void connect(String dbUrl){
-        try {
+        if(connection == null){
             String url = "jdbc:sqlite:" + dbUrl;
-            if(connection == null)
-                connection = DriverManager.getConnection(url);
-            else
-                System.out.println("Już jesteś połączony");
+        try {
+            connection = DriverManager.getConnection(url);
         }
         catch(SQLException e){
             System.out.println("Nawiązanie z bazą danych się nie powiodło");
-        }
+        }}
+        else
+            System.out.println("Już jesteś połączony");
     }
 
     public void disconnect(String path){
-
+        if(connection != null){
+            try{
+                connection.close();
+            } catch (SQLException e) {
+                System.out.println("Próba rozłączenia nie powiodła się");
+            }
+        }
     }
 }
