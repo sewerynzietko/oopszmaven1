@@ -7,4 +7,5 @@ public class Main {
         DatabaseConnection dbs = new DatabaseConnection();
         dbs.connect("university.sqlite");
     }
+
 }
