@@ -5,6 +5,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
+
+import database.DatabaseConnection;
 import music.Playlist;
 import music.Song;
 
@@ -14,20 +16,20 @@ public class ListenerAccount extends Account {
         super(id, name);
     }
 
-    public Playlist createPlaylist(List<Integer> songIds) throws SQLException {
-        Playlist playlist = new Playlist();
-        for(var id: songIds) {
-            if(!hasSong(id)) {
-                buySong(id);
-            }
-            var optionalSong = Song.Persistence.read(id);
-            if(optionalSong.isPresent())
-                playlist.add(optionalSong.get());
-            else
-                throw new SQLException();
-        }
-        return playlist;
-    }
+//    public Playlist createPlaylist(List<Integer> songIds) throws SQLException {
+//        Playlist playlist = new Playlist();
+//        for(var id: songIds) {
+//            if(!hasSong(id)) {
+//                buySong(id);
+//            }
+//            var optionalSong = Song.Persistence.read(id);
+//            if(optionalSong.isPresent())
+//                playlist.add(optionalSong.get());
+//            else
+//                throw new SQLException();
+//        }
+//        return playlist;
+//    }
 
 
     public static class Persistence {

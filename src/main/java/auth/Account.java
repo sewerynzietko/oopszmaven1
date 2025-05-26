@@ -1,6 +1,7 @@
 package auth;
 
 import at.favre.lib.crypto.bcrypt.BCrypt;
+import database.DatabaseConnection;
 
 import javax.naming.AuthenticationException;
 import java.sql.PreparedStatement;
@@ -50,7 +51,7 @@ public class Account {
             String hashedPassword =  BCrypt.withDefaults().hashToString(12, password.toCharArray());
             try {
                 String insertSQL = "INSERT INTO account(username, password) VALUES (?, ?)";
-                PreparedStatement statement = auth.DatabaseConnection.getConnection().prepareStatement(insertSQL);
+                PreparedStatement statement = DatabaseConnection.getConnection().prepareStatement(insertSQL);
 
                 statement.setString(1, username);
                 statement.setString(2, hashedPassword);

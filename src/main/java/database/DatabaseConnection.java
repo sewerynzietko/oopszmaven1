@@ -1,36 +1,48 @@
 package database;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
 public class DatabaseConnection {
-    private Connection connection;
 
-    public Connection getConnection() {
-        return connection;
+    static private final Map<String, Connection> connections = new HashMap<>();
+
+    static public Connection getConnection() {
+        return getConnection("");
     }
 
-    public void connect(String dbUrl){
-        if(connection == null){
-            String url = "jdbc:sqlite:" + dbUrl;
+    static public Connection getConnection(String name) {
+        return connections.get(name);
+    }
+
+    static public void connect(String filePath) {
+        connect(filePath, "");
+    }
+
+    static public void connect(String filePath, String connectionName){
         try {
-            connection = DriverManager.getConnection(url);
+            Connection connection = DriverManager.getConnection("jdbc:sqlite:" + filePath);
+            connections.put(connectionName, connection);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
         }
-        catch(SQLException e){
-            System.out.println("Nawiązanie z bazą danych się nie powiodło");
-        }}
-        else
-            System.out.println("Już jesteś połączony");
     }
 
-    public void disconnect(String path){
-        if(connection != null){
-            try{
-                connection.close();
-            } catch (SQLException e) {
-                System.out.println("Próba rozłączenia nie powiodła się");
-            }
+    static public void disconnect() {
+        disconnect("");
+    }
+
+    static public void disconnect(String connectionName){
+        try {
+            Connection connection = connections.get(connectionName);
+            connection.close();
+            connections.remove(connectionName);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
         }
     }
 }
+
